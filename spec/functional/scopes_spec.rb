@@ -13,8 +13,8 @@ describe "Scopes" do
     context "basic scopes" do
       before do
         @document.class_eval do
-          scope :old, :age.gt => 60
-          scope :teens, :age.gte => 13, :age.lte => 19
+          scope :old, :age => {:'$gt' => 60}
+          scope :teens, :age => {:'$gte' => 13, :'$lte' => 19}
         end
       end
 
@@ -65,7 +65,7 @@ describe "Scopes" do
       before do
         @document.class_eval do
           scope :age,     lambda { |age| {:age => age} }
-          scope :ages,    lambda { |low, high| {:age.gte => low, :age.lte => high} }
+          scope :ages,    lambda { |low, high| {:age => {:'$gte' => low, :'$lte' => high} }}
           scope :ordered, lambda { |s| sort(s) }
         end
       end
@@ -98,7 +98,7 @@ describe "Scopes" do
     context "query scopes" do
       before do
         @document.class_eval do
-          scope :boomers, where(:age.gte => 60).sort(:age)
+          scope :boomers, where(:age => {:'$gte' => 60}).sort(:age)
         end
       end
 
@@ -145,7 +145,7 @@ describe "Scopes" do
           @document.create(:name => 'John', :age => 20)
           @document.class_eval do
             def self.young
-              query(:age.lte => 12)
+              query(:age => {:'$lte' => 12})
             end
           end
           docs = @document.by_name('John').young.all

@@ -135,7 +135,7 @@ describe "InArrayProxy" do
 
       context "all" do
         it "should work" do
-          @user.lists.all(:order => :position.asc).should == [@list1, @list2]
+          @user.lists.all(:order => {:position => 1}).should == [@list1, @list2]
         end
 
         it "should work with conditions" do

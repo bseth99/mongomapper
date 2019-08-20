@@ -51,7 +51,7 @@ module MongoMapper
           end
 
           # Make sure we're not including the current document in the query
-          conditions[:_id.ne] = record._id if record._id
+          conditions[:_id] = {'$ne': record._id} if record._id
 
           if @klass.exists?(conditions)
             record.errors.add(attribute, :taken, options.except(:case_sensitive, :scope).merge(:value => value))
